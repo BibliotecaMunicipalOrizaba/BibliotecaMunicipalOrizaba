@@ -1,185 +1,346 @@
 <?php
 session_start();
-include("admin/conexion.php");
-if(isset($_SESSION['usuario']))
- {
+include("conexion.php");
+if(isset($_SESSION['user']))
+ {?>
 
-$consulta=mysqli_query($con, "select * from libros limit 0,6");
-$nro_reg=mysqli_num_rows($consulta);
-    if ($nro_reg==0){
-	echo 'No Tienes libros en la Base de Datos';
-	}
-	$result=mysqli_query($con, "SELECT count(utc) as visitas from visitas");
-   	$row = mysqli_fetch_array($result);
-    $numero_visitas = $row["visitas"];
-    $fechaMensaje =date("Y-m-d");
-	$result2=mysqli_query($con, "SELECT count(utc) as visitas from visitas WHERE fecha_visita = '".$fechaMensaje."'");
-    $row2 = mysqli_fetch_array($result2);
-    $visitas_hoy = $row2["visitas"];
+<?php
+
+$result=mysqli_query($con, "SELECT count(utc) as visitas from visitas");
+$row = mysqli_fetch_array($result);
+    $nvisitas = $row["visitas"];
+
+$visitas = "select * from visitas";
+$visitas2 = mysqli_query($con, $visitas);
+$tvisitas = mysqli_num_rows($visitas2);
+
+
+$peticion = "select * from libros";
+$resultado = mysqli_query($con, $peticion);
+$contados = mysqli_num_rows($resultado);
+
+$peticion2 = "select * from comentarios";
+$resultado2 = mysqli_query($con, $peticion2);
+$contados2 = mysqli_num_rows($resultado2);
+
+$peticion3 = "select * from visitantes";
+$resultado3 = mysqli_query($con, $peticion3);
+$contados3 = mysqli_num_rows($resultado3);
+
+$peticion5 = "select * from administrador_biblioteca";
+$resultado5 = mysqli_query($con, $peticion5);
+$contados5 = mysqli_num_rows($resultado5);
+
+$peticion6 = "select * from usuario_estudiante";
+$resultado6 = mysqli_query($con, $peticion6);
+$contados6 = mysqli_num_rows($resultado6);
+
+$peticion7 = "select * from acervo";
+$resultado7 = mysqli_query($con, $peticion7);
+$contados7 = mysqli_num_rows($resultado7);
+
+$peticion77 = "select * from acervo where seccion='Donacion'";
+$resultado77 = mysqli_query($con, $peticion77);
+$contados77 = mysqli_num_rows($resultado77);
+
+$peticion777 = "select * from acervo where seccion='DGB'";
+$resultado777 = mysqli_query($con, $peticion777);
+$contados777 = mysqli_num_rows($resultado777);
+
+$peticion8 = "select * from registrousuarios";
+$resultado8 = mysqli_query($con, $peticion8);
+$contados8 = mysqli_num_rows($resultado8);
+
+
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="biblioteca virtual UNI">
-    <title>Biblioteca Couto| Inicio</title>
+    <meta name="author" content="">
+    <title>Biblioteca Publica Municipal de Orizaba|Admin</title>
+    <link rel="shortcut icon" href="../images/icono2.ico">
+    <!-- Libreria de Bootstrap-->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/prettyPhoto.css" rel="stylesheet">
-    <link href="css/price-range.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-	<link href="css/main.css" rel="stylesheet">
-	<link href="css/responsive.css" rel="stylesheet">     
-    <link rel="shortcut icon" href="images/iconolibreria.ico">
-	<link href="css/style.css" rel="stylesheet" />
-	<script src="https://kit.fontawesome.com/7de388b156.js" crossorigin="anonymous"></script>
-	<!--
-	<link rel ="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-	
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"> </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/poppers.js/1.12.9/udm/popper.min.js" > </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"> </script>-->
+    <!-- hojas de estilo css -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+    <!-- graficos morris -->
+    <link href="css/morris.css" rel="stylesheet">
+    <!-- fuentes -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="https://kit.fontawesome.com/7de388b156.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<!--barra de correo, telefono y login-->
-<?php include ('includes/header.php');?>
-<!--slider de imagenes-->
-<?php include ('includes/slider.php');?>	
-<section>
-   <div class="container">
-		<div class="row">
-		<!--Menu lateral Izquierdo-->
-			<?php //include ('includes/sidebarIzquierdo.php'); ?>
-			<div class="col-sm-3"> <!--/Inicio de barra lateral izquierda-->
-	<div class="left-sidebar">				
-	    <div class="brands_products"><!--brands_products-->
-			<h2>Categorias</h2>
-			<div class="brands-name">
-				<ul class="nav nav-pills nav-stacked">
-			  
-				<?php
-							$caq=mysqli_query($con,"select * from categorias");
-							while($catrow=mysqli_fetch_array($caq)){
-								?>
-								<li class="divider"></li>
-								<li><a href="inicio.php?cat=<?php echo $catrow['id_categoria']; ?>"><?php echo $catrow['nombre_categoria']; ?></a></li>
-								<?php
-							}
-						
-						?>
-				</ul>
-			</div>
-		</div><!--/brands_products-->
-		    <div class="price-range"><!--price-range-->
-				<h2>Visitas</h2>
-				<div class="col-md-4">
-				    <img src="images/home/visitas.png" width="60" height="60">
-				</div>
-				<div class="col-md-8">
-					<h5><b><?php  echo $numero_visitas;?> Visitas Totales</b></h5>
-					<h6><b><?php  echo $visitas_hoy;?> Visitas Hoy</b></h6>
-				</div>
-			</div><!--/price-range-->					
-	</div>
-</div> <!--fin de barra lateral izquierda-->
-			<div class="col-sm-9 padding-right">
-				<!--Contenido Central donde se muestran los libros-->
-				<!--Cuadros con los libros obtenidos de la base de datos-->
-                <div class="features_items">
-				<h2 class="title text-center">Listado de Libros</h2>
-			   <?php
-
-        if (isset($_GET['cat'])) {
-         $cat=$_GET['cat'];
-        }
-        else{
-        $cat = "1";	
-       // echo "<script>alert('No tenemos libros con esa categoria')</script>";
-        }
-		$query=mysqli_query($con,"select * from libros where id_categoria='$cat'");
-		$queryone=mysqli_query($con,"select * from pdf");
-
-		if (mysqli_num_rows($query) < 1) {
-		//echo "<script>alert('No tenemos libros con esa categoria')</script>";
-		 echo "<div class='col-sm-3'>";  
-		 echo "<p style='color:red;'><b>No tenemos Libros para esta Categoria</b></p>"; 
-		 echo "</div>";   	
-		}
-		else{
-			
-			while($row=mysqli_fetch_array($query)){
-			
-		        $id=$row['id_libro'];
-				$foto=$row['foto'];
-				$nombre=$row['nombre'];
-				$descripcion=$row['descripcion'];
-				$link=$row['url_descarga'];	
-				
-			?>
+   <?php include('navegacion.php');?>
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- Cabecera-->
+                <div class="row">
+                    <div class="col-md-12 col-xs-12 col-lg-12">
+                        <center><h3 class="page-header">
+                            <small><img src="images/logo.png" class="img-responsive" width="200" height="200"></small><B>  Administracion de Biblioteca</B> </h3>
+                    </div></center>
+                </div>
+                <!-- /.inicio de fila row-->
+                <div class="row">
+                   
+                
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                    <i class="fas fa-atlas fa-5x" ></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Libros En Plataforma</div>
+                                        <div>Libros subidos</div>
+                                        Total:
+                                        <B> <?php  echo $contados;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="libros.php">
+                                <div class="panel-body">
+                                    <span class="pull-left">Ver Libros digitales ahora</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                
+                    
 
 
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                    <i class="fas fa-comment-dots fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Comentarios</div>
+                                        <div>Historial de opiniones</div>
+                                        Total :
+                                        <B> <?php  echo $contados2;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="comentarios.php">
+                                <div class="panel-body">
+                                    <span class="pull-left">Ver Historial de Comentarios</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                   
 
-             <div class="col-sm-3">
-					<div class="product-image-wrapper">
-						<div class="single-products">
-							<div class="productinfo text-center">
-						<img src="admin/<?php echo $foto ?>" width="100" heigth="90">	 <p><?php echo $nombre ?></p>
-						    <p><?php //echo $descripcion ?></p>
-						    </div>
-							    <div class="product-overlay">
-									<div class="overlay-content">
-						<img src="admin/<?php echo $foto ?>" width="150" heigth="150">
-									<p><?php echo $nombre ?></p>
-									<?php $queryone=mysqli_query($con,"select id_pdf from pdf where id_libro='$id'"); 
-									while($row=mysqli_fetch_array($queryone)){
-										$id=$row['id_pdf'];}?>
-									
-									<a href="admin/pdf/archivo.php?id=<?php echo $id?>" class="btn btn-default add-to-cart">
-									<i class="fa fa-download"></i>Ver y Descargar</a>
-									<!-- boton leer online por si se acaba el espacio en servidor
-									<a href="<?php //echo $link?>" class="btn btn-default add-to-cart"><i class="fa fa-download"></i>Leer Online</a>-->
-                                     </div>
-									 
-								</div>
-					    </div>
-					</div>
-			   </div>
-			   
-         <?php } }  ?>
-         <br>
-					<!--Tabs-->
-			     <div class="row">	<?php// include ('includes/tabs.php');?> </div>
-					<!--slider de abajo-->
-					<?php //include ('includes/sliderInferior.php');?> 
-					<?php //include ('includes/tabs.php');?> 					
-				</div>
-			</div>
-		</div>
-	</section>
-	<!--pie de pagina-->
-<?php 
-include ("includes/footer2.php");
-include ('includes/footer.php');
-include ("includes/subfooter.php");?>
-	 <!--Librerias de Jquery, Bootstrap y otras mas--> 
+                      <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                    <i class="fas fa-address-book fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Prestamistas</div>
+                                        <div>Datos de prestamo</div>
+                                          Total :
+                                        <B> <?php echo $contados6;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="estudiantes.php">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Ver Datos Prestamistas</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                      <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                    <i class="fas fa-users-cog fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Administradores</div>
+                                        <div>Cuentas Trabajadores</div>
+                                          Total :
+                                        <B> <?php  echo $contados5;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="usuarios.php">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Ver Empleados</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <!--finje como separador de filas-->
+                    <div class="row">
+                    <div class="col">.</div>
+                    <div class="col">.</div>
+                    <div class="col">.</div>
+                    <div class="col">.</div>
+                    </div>
+
+
+
+
+
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                    <i class="fas fa-book-reader fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Acervo</div>
+                                        <div>Libros fisicos: <B> <?php  echo $contados7;?></B></div>
+                                       Donacion:<B> <?php  echo $contados77;?></B>
+                                       <br>DGB:<B> <?php  echo $contados777;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="Acervo.php">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Gestionar Acervo Fisico ahora</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    
+                      <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fas fa-users fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Visitantes</div>
+                                        <div>Historial de visitantes presencial</div>
+                                        Total:
+                                       <B> <?php  echo $contados8;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="RegistroU.php">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Ver archivo historico de visitas</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                    <i class="fas fa-id-card fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Usuarios</div>
+                                        <div>Cuentas creadas</div>
+                                        Total:
+                                       <B> <?php  echo $contados3;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="visitantes.php">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Gestionar los Usuarios</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    
+                      <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-globe fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">Visitas WEB</div>
+                                        <div>Monitorear las Visitas</div>
+                                        Total:
+                                       <B> <?php  echo $tvisitas;?></B>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="visitas.php">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Ver Historial de Visitas</span>
+                                    <span class="pull-right">IR <i class="fas fa-sign-in-alt"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+                      
+                    
+
+                </div>
+                <!-- /.row o fila -->
+            </div>
+            <!-- /.contenedor -->
+        </div>
+    </div>
     <script src="js/jquery.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.scrollUp.min.js"></script>
-	<script src="js/price-range.js"></script>
-    <script src="js/jquery.prettyPhoto.js"></script>
-    <script src="js/main.js"></script>
-	
-	
-	
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/morris/raphael.min.js"></script>
+    <script src="js/plugins/morris/morris.min.js"></script>
+    <script src="js/plugins/morris/morris-data.js"></script>
 </body>
-
 </html>
-<?php include "log.php"; ?>
 <?php
 }else{
-    echo '<script> window.location="index.php"; </script>';
+    echo '<script> window.location="../login/login.php"; </script>';
 }
 ?>
