@@ -1,0 +1,50 @@
+/*
+Hoja de estilo para ejemplo de transiciones
+Utiliza
+Autor: BAOZ
+*/
+.paraTraslado{
+	padding: 2em;
+	
+	/*Para transición*/
+    transition: transform 3s;
+}
+/*Al pasar el mouse sobre el elemento, se traslada n unidades en X y Y respectivamente*/
+.paraTraslado:hover{
+    transform: translate(3.2em,3.2em); 
+}
+
+
+.paraRotado{
+	padding: 2em;
+	
+	/*Para transición*/
+    transition: transform 3s;
+}
+/*Al pasar el mouse sobre el elemento, rota n grados en el sentido de las 
+manecillas del reloj (un número negativo rota en el sentido contrario)*/
+.paraRotado:hover{
+    transform: rotate(120deg); 
+}
+
+.paraCambioTam{
+	padding: 2em;
+	
+	/*Para transición*/
+    transition: transform 3s;
+}
+/*Al pasar el mouse sobre el elemento, cambia el tamaño n veces en ancho y m veces en alto*/
+.paraCambioTam:hover{
+    transform: scale(2.5,2.5); 
+}
+
+.paraExprimido{
+	padding: 2em;
+	
+	/*Para transición*/
+    transition: transform 3s;
+}
+/*Al pasar el mouse sobre el elemento, tuerce la figura n grados en X y m grados en Y*/
+.paraExprimido:hover{
+    transform: skew(10deg, 20deg); 
+}

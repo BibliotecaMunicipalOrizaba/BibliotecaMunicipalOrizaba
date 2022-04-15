@@ -1,0 +1,8 @@
+
+.icon-picture:before { content: '\e800'; } /* '' */
+.icon-clock:before { content: '\e801'; } /* '' */
+.icon-calendar:before { content: '\e802'; } /* '' */
+.icon-help:before { content: '\f128'; } /* '' */
+.icon-whatsapp:before { content: '\f232'; } /* '' */
+.icon-address-book:before { content: '\f2b9'; } /* '' */
+.icon-instagram:before { content: '\f31e'; } /* '' */
